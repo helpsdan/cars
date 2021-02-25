@@ -3,8 +3,11 @@ package com.devnaweb.cars.integration.usecases;
 import com.devnaweb.cars.entities.Car;
 import com.devnaweb.cars.entities.responses.CarResponse;
 import com.devnaweb.cars.exceptions.CarNotFoundException;
+import com.devnaweb.cars.fixtures.CarFixture;
 import com.devnaweb.cars.repositories.CarRepository;
+import com.devnaweb.cars.usecases.CreateCar;
 import com.devnaweb.cars.usecases.GetCar;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,14 +28,21 @@ public class GetCarIntegrationTest {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private CreateCar createCar;
+
+    private final Car car = CarFixture.DEFAULT_VALUE;
+
     @Test
     @DisplayName("Should get car when exists")
     void shouldGetCarWhenExists() {
-        final CarResponse car = getCar.execute(1L);
-        assertThat(car.getId(), is(1L));
-        assertThat(car.getModel(), is("X1"));
-        assertThat(car.getBrand(), is("BMW"));
-        assertThat(car.getColor(), is("Black"));
+        createCar.execute(car);
+
+        final CarResponse car = getCar.execute(4L);
+        assertThat(car.getId(), is(4L));
+        assertThat(car.getModel(), is("CIVIC"));
+        assertThat(car.getBrand(), is("HONDA"));
+        assertThat(car.getColor(), is("White"));
     }
 
     @Test
