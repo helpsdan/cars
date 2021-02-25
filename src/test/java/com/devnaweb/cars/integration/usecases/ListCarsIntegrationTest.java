@@ -1,7 +1,10 @@
 package com.devnaweb.cars.integration.usecases;
 
+import com.devnaweb.cars.entities.Car;
 import com.devnaweb.cars.entities.responses.CarResponse;
+import com.devnaweb.cars.fixtures.CarFixture;
 import com.devnaweb.cars.repositories.CarRepository;
+import com.devnaweb.cars.usecases.CreateCar;
 import com.devnaweb.cars.usecases.ListCars;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -23,15 +26,19 @@ public class ListCarsIntegrationTest {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private CreateCar createCar;
+
+    private final Car car = CarFixture.DEFAULT_VALUE;
+
     @Test
     @DisplayName("Should list cars when exist")
     void shouldListCarsWhenExist() {
+        createCar.execute(car);
+        carRepository.deleteAll();
+
         final List<CarResponse> cars = listCars.execute();
 
-        assertThat(cars.size(), is(3));
-        assertThat(cars.get(0).getId(), is(1L));
-        assertThat(cars.get(0).getModel(), is("X1"));
-        assertThat(cars.get(0).getBrand(), is("BMW"));
-        assertThat(cars.get(0).getColor(), is("Black"));
+        assertThat(cars.size(), is(1));
     }
 }
