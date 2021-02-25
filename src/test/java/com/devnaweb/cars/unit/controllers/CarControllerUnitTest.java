@@ -166,7 +166,6 @@ public class CarControllerUnitTest extends AbstractControllerTest {
     @Test
     @DisplayName("Should list cars when cars exist")
     void shouldListCarsWhenExistCars() throws Exception {
-        final CarRequest car = CarRequestFixture.DEFAULT_VALUE;
         when(listCars.execute()).thenReturn(Collections.singletonList(CarResponseFixture.DEFAULT_VALUE));
 
         mockMvc.perform(get("/api/cars")
